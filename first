@@ -1,0 +1,78 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#define MAX_SIZE 10000
+
+// Function to sort a list in ascending order
+void sortList(int list[], int size) {
+    int i, j;
+
+    // Sorting the list using bubble sort
+    for (i = 0; i < size - 1; i++) {
+        for (j = 0; j < size - i - 1; j++) {
+            if (list[j] > list[j + 1]) {
+                int temp = list[j];
+                list[j] = list[j + 1];
+                list[j + 1] = temp;
+            }
+        }
+    }
+}
+
+int main() {
+    int list1[MAX_SIZE], list2[MAX_SIZE];
+    int size1 = 0, size2 = 0;
+    char input[1024];
+
+    printf("Enter pairs of numbers (one pair per line). Terminate input with an empty line:\n");
+
+    // Read multiple lines of input
+    while (fgets(input, sizeof(input), stdin)) {
+        // Check for empty line
+        if (strcmp(input, "\n") == 0) {
+            break;
+        }
+
+        int num1, num2;
+        if (sscanf(input, "%d %d", &num1, &num2) == 2) {
+            if (size1 < MAX_SIZE && size2 < MAX_SIZE) {
+                list1[size1++] = num1;
+                list2[size2++] = num2;
+            } else {
+                printf("Error: Maximum list size exceeded!\n");
+                return 1;
+            }
+        } else {
+            printf("Invalid input. Please enter two integers per line.\n");
+        }
+    }
+
+    // Sort both lists
+    sortList(list1, size1);
+    sortList(list2, size2);
+
+    // Output the sorted lists
+    printf("\nSorted list1: \n");
+    for (int i = 0; i < size1; i++) {
+        printf("%d ", list1[i]);
+    }
+
+    printf("\n\nSorted list2: \n");
+    for (int i = 0; i < size2; i++) {
+        printf("%d ", list2[i]);
+    }
+
+    // Calculate and output the sum of differences
+    int totalDifference = 0;
+    int minSize = size1 < size2 ? size1 : size2;
+
+    for (int i = 0; i < minSize; i++) {
+        int difference = abs(list1[i] - list2[i]);
+        totalDifference += difference;
+    }
+
+    printf("\n\nTotal sum of differences: %d\n", totalDifference);
+
+    return 0;
+}
